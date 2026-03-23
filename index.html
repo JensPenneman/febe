@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Febe — Taalopdrachten</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
   <script src="data.js"></script>
 </head>
 <body>
@@ -43,7 +43,7 @@
 
       grid.appendChild(card);
 
-      QRCode.toCanvas(canvas, url, { width: 200, margin: 2 }, (err) => {
+      QRCode.toCanvas(canvas, url, { width: 200, margin: 2, errorCorrectionLevel: "H" }, (err) => {
         if (err) console.error(err);
       });
     });

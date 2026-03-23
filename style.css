@@ -252,6 +252,38 @@ footer {
   }
 }
 
+/* ── Scan Page ── */
+.scan-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#scanner-container {
+  width: 100%;
+  max-width: 500px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.scan-status {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.scan-status.success {
+  color: var(--color-accent-green);
+}
+
+.scan-status.error {
+  color: #e17055;
+}
+
 /* ── Print styles ── */
 @media print {
   body {

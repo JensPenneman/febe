@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Febe" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <title>Febe — Scanner</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@latest/html5-qrcode.min.js"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Scan een QR-code</h1>
+    <p class="subtitle">Richt de camera op een QR-code</p>
+  </header>
+
+  <main class="scan-main">
+    <div id="scanner-container"></div>
+    <p id="scan-status" class="scan-status">Wachten op QR-code...</p>
+  </main>
+
+  <script>
+    const status = document.getElementById("scan-status");
+    let navigating = false;
+
+    const scanner = new Html5Qrcode("scanner-container");
+
+    scanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (decodedText) => {
+        if (navigating) return;
+
+        // Only navigate to URLs that belong to this site
+        if (decodedText.includes("task.html") || decodedText.includes("play.html")) {
+          navigating = true;
+          status.textContent = "Gevonden! Even laden...";
+          status.className = "scan-status success";
+          scanner.stop().then(() => {
+            // Convert full URL to relative path for local/hosted use
+            try {
+              const url = new URL(decodedText);
+              window.location.href = url.pathname.split("/").pop() + url.search;
+            } catch {
+              window.location.href = decodedText;
+            }
+          });
+        } else {
+          status.textContent = "Ongeldige QR-code, probeer opnieuw.";
+          status.className = "scan-status error";
+        }
+      },
+      () => {} // ignore scan failures (no QR in frame)
+    ).catch((err) => {
+      status.textContent = "Kan camera niet openen. Geef toestemming in de instellingen.";
+      status.className = "scan-status error";
+      console.error(err);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Febe — Luister &amp; Leer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="data.js"></script>
+</head>
+<body>
+  <header>
+    <a id="back-link" href="index.html" class="back-link">&larr; Terug</a>
+    <h1 id="page-title"></h1>
+  </header>
+
+  <main id="play-content" class="play-content"></main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const taskId = params.get("task");
+    const childId = params.get("child");
+
+    const task = APP_DATA.tasks.find((t) => t.id === taskId);
+    const child = APP_DATA.children.find((c) => c.id === childId);
+
+    if (!task || !child) {
+      document.getElementById("page-title").textContent = "Niet gevonden";
+    } else {
+      document.getElementById("back-link").href = `task.html?id=${task.id}`;
+      document.getElementById("page-title").textContent = `${child.icon} ${child.name}`;
+
+      const translation = task.translations[child.languageCode];
+      const content = document.getElementById("play-content");
+
+      if (!translation) {
+        content.innerHTML = "<p>Geen vertaling beschikbaar.</p>";
+      } else {
+        // Native language block
+        const nativeBlock = createWordBlock(
+          translation.word,
+          child.languageCode,
+          "Jouw taal"
+        );
+        content.appendChild(nativeBlock);
+
+        // Arrow separator
+        const arrow = document.createElement("div");
+        arrow.className = "arrow";
+        arrow.textContent = "\u2B07\uFE0F";
+        content.appendChild(arrow);
+
+        // Dutch block
+        const dutchBlock = createWordBlock(
+          translation.dutch,
+          "nl",
+          "Nederlands"
+        );
+        content.appendChild(dutchBlock);
+      }
+    }
+
+    function createWordBlock(text, langCode, label) {
+      const block = document.createElement("div");
+      block.className = "word-block";
+
+      const labelEl = document.createElement("span");
+      labelEl.className = "word-label";
+      labelEl.textContent = label;
+      block.appendChild(labelEl);
+
+      const playBtn = document.createElement("button");
+      playBtn.className = "play-btn";
+      playBtn.setAttribute("aria-label", `Luister: ${text}`);
+      playBtn.innerHTML = `<span class="play-icon">\u25B6\uFE0F</span>`;
+      playBtn.addEventListener("click", () => speak(text, langCode, playBtn));
+      block.appendChild(playBtn);
+
+      const wordEl = document.createElement("p");
+      wordEl.className = "word-text";
+      wordEl.lang = langCode;
+      wordEl.textContent = text;
+      block.appendChild(wordEl);
+
+      return block;
+    }
+
+    function speak(text, langCode, btn) {
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = langCode;
+      utterance.rate = 0.85;
+
+      btn.classList.add("playing");
+      utterance.onend = () => btn.classList.remove("playing");
+      utterance.onerror = () => btn.classList.remove("playing");
+
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>

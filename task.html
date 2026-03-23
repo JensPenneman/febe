@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Febe — Opdracht</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="data.js"></script>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="back-link">&larr; Terug</a>
+    <h1 id="task-title"></h1>
+    <p class="subtitle">Tik op jouw icoontje</p>
+  </header>
+
+  <main id="icon-grid" class="icon-grid"></main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const taskId = params.get("id");
+    const task = APP_DATA.tasks.find((t) => t.id === taskId);
+
+    if (!task) {
+      document.getElementById("task-title").textContent = "Opdracht niet gevonden";
+    } else {
+      document.getElementById("task-title").textContent = task.title;
+
+      const grid = document.getElementById("icon-grid");
+
+      APP_DATA.children.forEach((child) => {
+        if (!task.translations[child.languageCode]) return;
+
+        const card = document.createElement("a");
+        card.className = "icon-card";
+        card.href = `play.html?task=${task.id}&child=${child.id}`;
+
+        const icon = document.createElement("span");
+        icon.className = "icon";
+        icon.textContent = child.icon;
+        card.appendChild(icon);
+
+        const name = document.createElement("span");
+        name.className = "icon-name";
+        name.textContent = child.name;
+        card.appendChild(name);
+
+        grid.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

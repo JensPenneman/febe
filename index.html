@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Febe — Taalopdrachten</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Taalopdrachten</h1>
+    <p class="subtitle">Scan een QR-code om een opdracht te starten</p>
+  </header>
+
+  <main id="qr-grid" class="qr-grid"></main>
+
+  <footer>
+    <button id="print-btn" class="btn" onclick="window.print()">Afdrukken</button>
+  </footer>
+
+  <script>
+    const grid = document.getElementById("qr-grid");
+
+    APP_DATA.tasks.forEach((task) => {
+      const card = document.createElement("div");
+      card.className = "qr-card";
+
+      const title = document.createElement("h2");
+      title.textContent = task.title;
+      card.appendChild(title);
+
+      const canvas = document.createElement("canvas");
+      canvas.id = `qr-${task.id}`;
+      card.appendChild(canvas);
+
+      const url = `${APP_DATA.baseUrl}/task.html?id=${task.id}`;
+      const link = document.createElement("p");
+      link.className = "qr-url";
+      link.textContent = url;
+      card.appendChild(link);
+
+      grid.appendChild(card);
+
+      QRCode.toCanvas(canvas, url, { width: 200, margin: 2 }, (err) => {
+        if (err) console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>

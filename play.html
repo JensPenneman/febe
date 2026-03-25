@@ -54,10 +54,17 @@
         content.appendChild(dutchBlock);
       } else {
         // Non-Dutch speaker — show native language, then Dutch
+        const nativeLabels = {
+          sq: "Gjuha jote",
+          bs: "Tvoj jezik",
+          ru: "\u{422}\u{432}\u{43E}\u{439} \u{44F}\u{437}\u{44B}\u{43A}",
+          en: "Your language",
+        };
+        const nativeLabel = nativeLabels[child.languageCode] || "Jouw taal";
         const nativeBlock = createWordBlock(
           translation.word,
           child.languageCode,
-          "Jouw taal"
+          nativeLabel
         );
         content.appendChild(nativeBlock);
 

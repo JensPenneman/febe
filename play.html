@@ -44,8 +44,16 @@
 
       if (!translation) {
         content.innerHTML = "<p>Geen vertaling beschikbaar.</p>";
+      } else if (child.languageCode === "nl") {
+        // Dutch speaker — just show the word once
+        const dutchBlock = createWordBlock(
+          translation.dutch,
+          "nl",
+          "Nederlands"
+        );
+        content.appendChild(dutchBlock);
       } else {
-        // Native language block
+        // Non-Dutch speaker — show native language, then Dutch
         const nativeBlock = createWordBlock(
           translation.word,
           child.languageCode,

@@ -249,6 +249,29 @@ footer {
   background: var(--color-primary-hover);
 }
 
+/* ── Done Button ── */
+.done-btn {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1.25rem;
+  background: var(--color-accent-green);
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0, 184, 148, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.done-btn:hover,
+.done-btn:active {
+  transform: scale(1.03);
+  box-shadow: 0 6px 24px rgba(0, 184, 148, 0.5);
+}
+
 /* ── Animation ── */
 @keyframes pulse {
   from {

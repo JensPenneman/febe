@@ -83,6 +83,13 @@
         );
         content.appendChild(dutchBlock);
       }
+
+      // Big green "done" button that sends kids back to the scanner
+      const doneBtn = document.createElement("a");
+      doneBtn.href = "scan.html";
+      doneBtn.className = "done-btn";
+      doneBtn.textContent = "\u2714\uFE0F Klaar!";
+      content.appendChild(doneBtn);
     }
 
     function createWordBlock(text, langCode, label, labelLangCode) {

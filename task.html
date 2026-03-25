@@ -39,9 +39,10 @@
         card.className = "icon-card";
         card.href = `play.html?task=${task.id}&child=${child.id}`;
 
-        const icon = document.createElement("span");
+        const icon = document.createElement("img");
         icon.className = "icon";
-        icon.textContent = child.icon;
+        icon.src = child.symbol;
+        icon.alt = child.name;
         card.appendChild(icon);
 
         const name = document.createElement("span");

@@ -138,8 +138,15 @@ header h1 {
 }
 
 .icon-card .icon {
-  font-size: 4rem;
-  line-height: 1;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.title-icon {
+  height: 1.5em;
+  vertical-align: middle;
+  margin-right: 0.25rem;
 }
 
 .icon-card .icon-name {

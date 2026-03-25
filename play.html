@@ -31,7 +31,13 @@
       document.getElementById("page-title").textContent = "Niet gevonden";
     } else {
       document.getElementById("back-link").href = `task.html?id=${task.id}`;
-      document.getElementById("page-title").textContent = `${child.icon} ${child.name}`;
+      const titleEl = document.getElementById("page-title");
+      const titleImg = document.createElement("img");
+      titleImg.src = child.symbol;
+      titleImg.alt = child.name;
+      titleImg.className = "title-icon";
+      titleEl.appendChild(titleImg);
+      titleEl.appendChild(document.createTextNode(` ${child.name}`));
 
       const translation = task.translations[child.languageCode];
       const content = document.getElementById("play-content");

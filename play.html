@@ -30,7 +30,6 @@
     if (!task || !child) {
       document.getElementById("page-title").textContent = "Niet gevonden";
     } else {
-      document.documentElement.lang = child.languageCode;
       document.getElementById("back-link").href = `task.html?id=${task.id}`;
       const titleEl = document.getElementById("page-title");
       const titleImg = document.createElement("img");
@@ -65,7 +64,8 @@
         const nativeBlock = createWordBlock(
           translation.word,
           child.languageCode,
-          nativeLabel
+          nativeLabel,
+          child.languageCode
         );
         content.appendChild(nativeBlock);
 
@@ -85,12 +85,13 @@
       }
     }
 
-    function createWordBlock(text, langCode, label) {
+    function createWordBlock(text, langCode, label, labelLangCode) {
       const block = document.createElement("div");
       block.className = "word-block";
 
       const labelEl = document.createElement("span");
       labelEl.className = "word-label";
+      labelEl.lang = labelLangCode || langCode;
       labelEl.textContent = label;
       block.appendChild(labelEl);
 

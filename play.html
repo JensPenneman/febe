@@ -30,6 +30,7 @@
     if (!task || !child) {
       document.getElementById("page-title").textContent = "Niet gevonden";
     } else {
+      document.documentElement.lang = child.languageCode;
       document.getElementById("back-link").href = `task.html?id=${task.id}`;
       const titleEl = document.getElementById("page-title");
       const titleImg = document.createElement("img");

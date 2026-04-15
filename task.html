@@ -45,6 +45,11 @@
         icon.alt = child.name;
         card.appendChild(icon);
 
+        // On click, tag this icon for view-transition morphing
+        card.addEventListener("click", () => {
+          icon.style.viewTransitionName = "child-symbol";
+        });
+
         const name = document.createElement("span");
         name.className = "icon-name";
         name.textContent = child.name;

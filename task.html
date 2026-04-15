@@ -33,7 +33,7 @@
       const grid = document.getElementById("icon-grid");
 
       APP_DATA.children.forEach((child) => {
-        if (!task.translations[child.languageCode]) return;
+        if (!task.steps[child.languageCode]) return;
 
         const card = document.createElement("a");
         card.className = "icon-card";

@@ -295,32 +295,49 @@ header h1 {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
-.step-line {
+/* ── Language Blocks ── */
+.lang-block {
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+}
+
+.lang-block--native {
+  background: var(--color-primary-light);
+}
+
+.lang-block--dutch {
+  background: #fef3e2;
+}
+
+.lang-block__header {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
 }
 
-.step-line-dutch {
-  opacity: 0.55;
-  padding-left: 0.4rem;
-  border-left: 3px solid var(--color-border);
-  margin-left: 0.15rem;
+.lang-block__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
 }
 
-.step-text {
+.lang-block__text {
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--color-text);
   line-height: 1.45;
 }
 
-.step-line-dutch .step-text {
-  font-weight: 400;
+.lang-block--dutch .lang-block__text {
+  font-weight: 500;
   font-size: 0.95rem;
+  color: #5a4e3c;
 }
 
 /* ── Play Buttons ── */
@@ -361,13 +378,31 @@ header h1 {
   color: white;
 }
 
-.step-line-dutch .play-btn {
-  width: 32px;
-  height: 32px;
-  opacity: 0.7;
+.lang-block .play-btn {
+  width: 34px;
+  height: 34px;
 }
 
-.step-line-dutch .play-icon {
+.lang-block .play-icon {
+  font-size: 0.9rem;
+}
+
+.lang-block--dutch .play-btn {
+  width: 30px;
+  height: 30px;
+  background: var(--color-accent-orange);
+  box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+}
+
+.lang-block--dutch .play-btn:hover {
+  background: #e67e22;
+}
+
+.lang-block--dutch .play-btn.playing {
+  background: var(--color-accent-green);
+}
+
+.lang-block--dutch .play-icon {
   font-size: 0.8rem;
 }
 

@@ -20,11 +20,12 @@
   <main id="play-content" class="play-content"></main>
 
   <script>
-    const nativeLabels = {
-      sq: "Gjuha jote",
-      bs: "Tvoj jezik",
-      ru: "\u0422\u0432\u043E\u0439 \u044F\u0437\u044B\u043A",
-      en: "Your language",
+    const languageNames = {
+      sq: "Shqip",
+      bs: "Bosanski",
+      ru: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439",
+      en: "English",
+      nl: "Nederlands",
     };
 
     const params = new URLSearchParams(window.location.search);
@@ -50,6 +51,7 @@
       const dutchSteps = task.steps.nl;
       const content = document.getElementById("play-content");
       const isDutch = child.languageCode === "nl";
+      const nativeName = languageNames[child.languageCode] || child.languageCode;
 
       if (!nativeSteps) {
         content.innerHTML = "<p>Geen vertaling beschikbaar.</p>";
@@ -67,14 +69,16 @@
           stepBody.className = "step-body";
 
           if (isDutch) {
-            // Dutch speaker — single line with play button
-            stepBody.appendChild(createStepLine(dutchSteps[i], "nl"));
+            stepBody.appendChild(
+              createLangBlock(dutchSteps[i], "nl", "Nederlands", "native")
+            );
           } else {
-            // Non-Dutch speaker — native line, then Dutch line
-            stepBody.appendChild(createStepLine(nativeText, child.languageCode));
-            const dutchLine = createStepLine(dutchSteps[i], "nl");
-            dutchLine.classList.add("step-line-dutch");
-            stepBody.appendChild(dutchLine);
+            stepBody.appendChild(
+              createLangBlock(nativeText, child.languageCode, nativeName, "native")
+            );
+            stepBody.appendChild(
+              createLangBlock(dutchSteps[i], "nl", "Nederlands", "dutch")
+            );
           }
 
           step.appendChild(stepBody);
@@ -90,24 +94,36 @@
       content.appendChild(doneBtn);
     }
 
-    function createStepLine(text, langCode) {
-      const line = document.createElement("div");
-      line.className = "step-line";
+    function createLangBlock(text, langCode, langName, variant) {
+      const block = document.createElement("div");
+      block.className = `lang-block lang-block--${variant}`;
+
+      const header = document.createElement("div");
+      header.className = "lang-block__header";
+
+      const label = document.createElement("span");
+      label.className = "lang-block__label";
+      label.lang = langCode;
+      label.textContent = langName;
+      header.appendChild(label);
 
       const playBtn = document.createElement("button");
-      playBtn.className = "play-btn play-btn-sm";
+      playBtn.type = "button";
+      playBtn.className = "play-btn";
       playBtn.setAttribute("aria-label", `Luister: ${text}`);
       playBtn.innerHTML = `<span class="play-icon">\u25B6\uFE0F</span>`;
       playBtn.addEventListener("click", () => speak(text, langCode, playBtn));
-      line.appendChild(playBtn);
+      header.appendChild(playBtn);
+
+      block.appendChild(header);
 
       const textEl = document.createElement("p");
-      textEl.className = "step-text";
+      textEl.className = "lang-block__text";
       textEl.lang = langCode;
       textEl.textContent = text;
-      line.appendChild(textEl);
+      block.appendChild(textEl);
 
-      return line;
+      return block;
     }
 
     function speak(text, langCode, btn) {

@@ -511,6 +511,19 @@ footer {
     border: 1px solid #ccc;
     break-inside: avoid;
     page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  .qr-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    display: block;
+    columns: 2;
+    column-gap: 1.5rem;
+  }
+
+  .qr-card {
+    margin-bottom: 1.5rem;
   }
 }
 

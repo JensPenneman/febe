@@ -494,6 +494,14 @@ footer {
     display: none;
   }
 
+  header {
+    margin-bottom: 0.5cm;
+  }
+
+  header h1 {
+    font-size: 1.4rem;
+  }
+
   header .subtitle,
   footer,
   .back-link,
@@ -502,28 +510,31 @@ footer {
   }
 
   .qr-grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 0.75cm;
   }
 
   .qr-card {
     box-shadow: none;
     border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5cm;
     break-inside: avoid;
     page-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
   }
 
-  .qr-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    display: block;
-    columns: 2;
-    column-gap: 1.5rem;
+  .qr-card h2 {
+    font-size: 0.85rem;
   }
 
-  .qr-card {
-    margin-bottom: 1.5rem;
+  .qr-card canvas {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  .qr-url {
+    font-size: 0.5rem;
   }
 }
 

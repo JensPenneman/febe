@@ -31,6 +31,20 @@ async function audioHash(lang, text) {
     .slice(0, 16);
 }
 
+// Score a voice by quality, primarily using Apple's voiceURI tier.
+// Higher is better. Apple's premium/enhanced/Siri voices are not exposed
+// to the Web Speech API, so the best we can reach is the "compact" tier.
+function voiceScore(v) {
+  const u = v.voiceURI || "";
+  if (u.includes("com.apple.voice.premium")) return 100;
+  if (u.includes("com.apple.voice.enhanced")) return 80;
+  if (u.includes("com.apple.voice.compact.")) return 50;
+  if (u.includes("com.apple.voice.super-compact")) return 30;
+  if (u.includes("com.apple.eloquence")) return 10;
+  if (u.includes("com.apple.speech.synthesis.voice")) return 5; // novelty/legacy
+  return v.localService ? 40 : 20; // unknown URI scheme (Chrome/Firefox)
+}
+
 function findVoice(langCode) {
   const voices = window.speechSynthesis.getVoices();
   const lc = langCode.toLowerCase();
@@ -40,16 +54,7 @@ function findVoice(langCode) {
       v.lang.toLowerCase().startsWith(lc + "-")
   );
   if (!matches.length) return null;
-
-  // Match Safari's "Start Speaking" pick: the user's system-selected voice,
-  // not a cloud Siri voice. `default` is set on the user's preferred voice
-  // for the current locale; `localService` filters out cloud voices.
-  return (
-    matches.find((v) => v.default && v.localService) ||
-    matches.find((v) => v.default) ||
-    matches.find((v) => v.localService) ||
-    matches[0]
-  );
+  return matches.slice().sort((a, b) => voiceScore(b) - voiceScore(a))[0];
 }
 
 function stopAll() {

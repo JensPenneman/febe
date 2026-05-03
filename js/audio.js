@@ -34,10 +34,21 @@ async function audioHash(lang, text) {
 function findVoice(langCode) {
   const voices = window.speechSynthesis.getVoices();
   const lc = langCode.toLowerCase();
+  const matches = voices.filter(
+    (v) =>
+      v.lang.toLowerCase() === lc ||
+      v.lang.toLowerCase().startsWith(lc + "-")
+  );
+  if (!matches.length) return null;
+
+  // Match Safari's "Start Speaking" pick: the user's system-selected voice,
+  // not a cloud Siri voice. `default` is set on the user's preferred voice
+  // for the current locale; `localService` filters out cloud voices.
   return (
-    voices.find((v) => v.lang.toLowerCase() === lc) ||
-    voices.find((v) => v.lang.toLowerCase().startsWith(lc + "-")) ||
-    null
+    matches.find((v) => v.default && v.localService) ||
+    matches.find((v) => v.default) ||
+    matches.find((v) => v.localService) ||
+    matches[0]
   );
 }
 

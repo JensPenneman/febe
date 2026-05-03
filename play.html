@@ -110,6 +110,7 @@
       const playBtn = document.createElement("button");
       playBtn.type = "button";
       playBtn.className = "play-btn";
+      playBtn.dataset.lang = langCode;
       playBtn.setAttribute("aria-label", `Luister: ${text}`);
       playBtn.innerHTML = `<span class="play-icon">\u25B6\uFE0F</span>`;
       playBtn.addEventListener("click", () => speak(text, langCode, playBtn));
@@ -126,11 +127,50 @@
       return block;
     }
 
+    function findVoice(langCode) {
+      const voices = window.speechSynthesis.getVoices();
+      const lc = langCode.toLowerCase();
+      return (
+        voices.find((v) => v.lang.toLowerCase() === lc) ||
+        voices.find((v) => v.lang.toLowerCase().startsWith(lc + "-")) ||
+        null
+      );
+    }
+
+    function refreshVoiceButtons() {
+      document.querySelectorAll(".play-btn[data-lang]").forEach((btn) => {
+        const voice = findVoice(btn.dataset.lang);
+        if (voice) {
+          btn.classList.remove("play-btn--no-voice");
+          btn.disabled = false;
+          btn.title = "";
+          btn.querySelector(".play-icon").textContent = "\u25B6\uFE0F";
+        } else {
+          btn.classList.add("play-btn--no-voice");
+          btn.disabled = true;
+          btn.title = "Geen stem beschikbaar voor deze taal op dit toestel";
+          btn.classList.remove("playing");
+          btn.querySelector(".play-icon").textContent = "\uD83D\uDD07";
+        }
+      });
+    }
+
+    refreshVoiceButtons();
+    if (typeof window.speechSynthesis !== "undefined") {
+      window.speechSynthesis.addEventListener?.("voiceschanged", refreshVoiceButtons);
+      // Safari fallback: assign onvoiceschanged
+      window.speechSynthesis.onvoiceschanged = refreshVoiceButtons;
+    }
+
     function speak(text, langCode, btn) {
       window.speechSynthesis.cancel();
 
+      const voice = findVoice(langCode);
+      if (!voice) return;
+
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = langCode;
+      utterance.voice = voice;
+      utterance.lang = voice.lang;
       utterance.rate = 0.85;
 
       btn.classList.add("playing");

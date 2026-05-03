@@ -23,43 +23,6 @@
     <p id="scan-status" class="scan-status">Wachten op QR-code...</p>
   </main>
 
-  <script>
-    const status = document.getElementById("scan-status");
-    let navigating = false;
-
-    const scanner = new Html5Qrcode("scanner-container");
-
-    scanner.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 250, height: 250 } },
-      (decodedText) => {
-        if (navigating) return;
-
-        // Only navigate to URLs that belong to this site
-        if (decodedText.includes("task.html") || decodedText.includes("play.html")) {
-          navigating = true;
-          status.textContent = "Gevonden! Even laden...";
-          status.className = "scan-status success";
-          scanner.stop().then(() => {
-            // Convert full URL to relative path for local/hosted use
-            try {
-              const url = new URL(decodedText);
-              window.location.href = url.pathname.split("/").pop() + url.search;
-            } catch {
-              window.location.href = decodedText;
-            }
-          });
-        } else {
-          status.textContent = "Ongeldige QR-code, probeer opnieuw.";
-          status.className = "scan-status error";
-        }
-      },
-      () => {} // ignore scan failures (no QR in frame)
-    ).catch((err) => {
-      status.textContent = "Kan camera niet openen. Geef toestemming in de instellingen.";
-      status.className = "scan-status error";
-      console.error(err);
-    });
-  </script>
+  <script src="js/scan.js"></script>
 </body>
 </html>
